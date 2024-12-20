@@ -1,5 +1,4 @@
 # notebook
-jupyterlab
 ipywidgets>=7.5
 notebook
 # analysis
@@ -12,6 +11,7 @@ transformers
 datasets
 matplotlib
 datachart
+anonipy
 # utility
 python-dotenv
 tqdm
