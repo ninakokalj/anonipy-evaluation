@@ -1,19 +1,12 @@
-# Template Experiment Project
+# PREPARE Anonipy Evaluation
 
-This is a template repository for creating an experiment environment in Python. It intends to speed up the research process - reducing the repository structure design - and to have it clean and concise through multiple experiments.
-
-Inspired by the [cookiecutter] folder structure.
-
-**Instructions:**
-
-- Search for all TODOs in the project and add the appropriate values
-- Rename this README title and description
+This project contains scripts for testing and evaluating different models relating to the `anonipy` package, including data anonymization and entity replacement.
 
 ## ☑️ Requirements
 
 Before starting the project make sure these requirements are available:
 
-- [python]. For setting up the environment and Python dependencies (version 3.8 or higher).
+- [python]. For setting up the environment and Python dependencies (version 3.9 or higher).
 - [git]. For versioning your code.
 
 ## 🛠️ Setup
@@ -107,14 +100,11 @@ TODO: Related work
 
 This work is developed by [Department of Artificial Intelligence][ailab] at [Jozef Stefan Institute][ijs].
 
-This work is supported by the Slovenian Research Agency and the Horizon Europe [Project Name][project] project [[Grant No. XXXXXXX][grant]].
+This work is supported by the Slovenian Research Agency and the Horizon Europe [PREPARE] project [[Grant No. 101080288][grant]].
 
-
-[cookiecutter]: https://drivendata.github.io/cookiecutter-data-science/
 [python]: https://www.python.org/
 [git]: https://git-scm.com/
 [ailab]: http://ailab.ijs.si/
 [ijs]: https://www.ijs.si/
-
-[project]: TODO
-[grant]: TODO
+[PREPARE]: https://prepare-rehab.eu/
+[grant]: https://cordis.europa.eu/project/id/101080288
