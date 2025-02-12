@@ -1,0 +1,47 @@
+
+
+# medical term -> common folder -> evaluate ner
+
+# medical term -> projects -> gliner -> scripts
+
+LLMs
+
+meta-llama/Meta-Llama-3-8B-Instruct             JA -quant
+meta-llama/Llama-3.1-8B-Instruct                JA -quant
+meta-llama/Llama-3.2-1B-Instruct                JA
+meta-llama/Llama-3.2-3B-Instruct                JA
+HuggingFaceTB/SmolLM2-135M-Instruct             JA
+HuggingFaceTB/SmolLM2-360M-Instruct             JA
+HuggingFaceTB/SmolLM2-1.7B-Instruct             JA
+mistralai/Mistral-7B-Instruct-v0.3              prevelik
+mistralai/Mistral-Small-Instruct-2409
+mistralai/Mixtral-8x7B-Instruct-v0.1
+microsoft/Phi-3.5-mini-instruct                 JA
+microsoft/phi-4
+Qwen/Qwen2.5-7B-Instruct                        JA -quant
+
+
+1) razdelim dataset 80% train, 20% test
+2) NER extractor naučim na train
+3) evaluation na test
+Za vsak llm:
+4) llm na testne podatke
+5) NER testiram + evaluation
+
+
+Uporaba:
+1) odpreš podatke, jih narediš gliner friendly in shraniš
+-> src/data/data.py
+
+2) natreniraš gliner model s podatki in ga shraniš
+-> src/models/finetune.py
+
+3) evaluiraš original, izračunaš p, r in f1
+-> results/original.py
+
+4) zamenjaš entitete z LLM-jem
+-> results/llm_1.py
+
+Naloge:
+- testiranje za napake
+
