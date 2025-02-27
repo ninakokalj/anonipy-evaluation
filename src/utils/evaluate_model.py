@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
 
 
-# python src/utils/evaluate_model.py --data_test_file data/llm100_test_dataset.json --model_path models/checkpoint-265 --output_file results/llms/attr/llm8_results.json
+# python src/utils/evaluate_model.py --data_test_file data/E3-JSI/test_dataset.json --model_path models/checkpoint-200 --output_file results/ckp_200.json
 
-# python src/utils/evaluate_model.py --data_test_file data/llm100_test_dataset.json --model_path models/checkpoint-265 --output_file results/llms/lang/llm8_results.json --per_language_eval
+
 

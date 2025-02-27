@@ -1,0 +1,19 @@
+HuggingFaceTB/SmolLM2-1.7B-Instruct -> llm1
+
+HuggingFaceTB/SmolLM2-135M-Instruct -> llm2
+
+HuggingFaceTB/SmolLM2-360M-Instruct -> llm3
+
+meta-llama/Llama-3.2-1B-Instruct    -> llm4
+
+microsoft/Phi-3.5-mini-instruct     -> llm5 //=========================================
+
+meta-llama/Llama-3.2-3B-Instruct    -> llm6
+
+meta-llama/Meta-Llama-3-8B-Instruct -> llm7
+
+meta-llama/Llama-3.1-8B-Instruct    -> llm8
+
+Qwen/Qwen2.5-7B-Instruct            -> llm9
+
+mistralai/Mistral-7B-Instruct-v0.3  -> llm10

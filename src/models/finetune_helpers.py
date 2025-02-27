@@ -26,7 +26,7 @@ def train_gliner_model(train_dataset, test_dataset):
     num_epochs = max(1, num_steps // num_batches)
 
     training_args = TrainingArguments(
-        output_dir="models",
+        output_dir="models/conll2003",
         learning_rate=5e-6,
         weight_decay=0.01,
         others_lr=1e-5,
@@ -38,7 +38,7 @@ def train_gliner_model(train_dataset, test_dataset):
         focal_loss_alpha=0.75,
         focal_loss_gamma=2,
         num_train_epochs=num_epochs,
-        evaluation_strategy="steps",
+        eval_strategy="steps",
         save_steps = 100,
         save_total_limit=10,
         dataloader_num_workers = 0,

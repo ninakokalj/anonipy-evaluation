@@ -109,9 +109,6 @@ def _relaxed_ner_evaluation(
     Returns:
         The true positives, false positives, and false negatives.
     """
-    if len(true_ents) == 0 and len(pred_ents) == 0:
-        return 1, 0, 0
-
     true_ents_set = set((ent["text"], ent["label"]) for ent in true_ents)
     pred_ents_set = set((ent["text"], ent["label"]) for ent in pred_ents)
 
@@ -122,8 +119,8 @@ def _relaxed_ner_evaluation(
                 tp += 1
                 break
 
-    fp = len(pred_ents_set) - tp
-    fn = len(true_ents_set) - tp
+    fp = max(len(pred_ents_set) - tp, 0)
+    fn = max(len(true_ents_set) - tp, 0)
     return tp, fp, fn
 
 

@@ -6,14 +6,14 @@ from finetune_helpers import train_gliner_model
 
 
 
-with open("data/train_dataset.json", "r") as f:
+with open("data/conll2003/train_dataset.json", "r") as f:
     train_dataset = json.load(f)
 
-with open("data/validation_dataset.json", "r") as f:
-    test_dataset = json.load(f)
+with open("data/conll2003/validation_dataset.json", "r") as f:
+    validation_dataset = json.load(f)
 
 
-train_gliner_model(train_dataset, test_dataset)
+train_gliner_model(train_dataset, validation_dataset)
 
 
 

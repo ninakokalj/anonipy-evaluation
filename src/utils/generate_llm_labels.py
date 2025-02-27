@@ -11,7 +11,7 @@ def main(args):
     llm_generator = LLMLabelGenerator(model_name = args.llm, use_gpu = not args.use_cpu, use_quant = args.use_quant)
 
     # saves the new dataset with LLM generated entities
-    generate_LLM_labels(args.data_test_file, args.new_data_output_file, llm_generator, use_entity_attrs = True)
+    generate_LLM_labels(args.data_test_file, args.new_data_output_file, llm_generator, use_entity_attrs = False)
 
 
 
@@ -46,5 +46,5 @@ if __name__ == "__main__":
     main(args)
 
 
-# python src/utils/generate_llm_labels.py --data_test_file data/test_dataset_filtered.json --llm meta-llama/Llama-3.2-1B-Instruct --new_data_output_file data/llm100_test_dataset.json --use_quant
+# python src/utils/generate_llm_labels.py --data_test_file data/conll2003/test_dataset.json --llm HuggingFaceTB/SmolLM2-1.7B-Instruct --new_data_output_file data/HuggingFaceTB/SmolLM2-1.7B-Instruct/conll_test.json
 

@@ -75,7 +75,7 @@ def create_new_gliner_example(example: dict, new_entities: list) -> dict:
     return {
         "text": example["text"],
         "language": example["language"],
-        "domain": example["domain"],
+        # "domain": example["domain"],
         "tokenized_text": ttext,
         "ner": ner,
     }

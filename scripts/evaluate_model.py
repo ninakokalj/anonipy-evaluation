@@ -2,10 +2,12 @@ import json
 from argparse import ArgumentParser
 from pathlib import Path
 import torch
+from collections import defaultdict
 
 from gliner import GLiNERConfig, GLiNER
 
 from ..src.utils.evaluate import evaluate
+
 
 
 def main(args):
@@ -24,7 +26,20 @@ def main(args):
     model = GLiNER.from_pretrained(args.model_path, load_tokenizer=True)
     model.to(device)
 
-    performances = evaluate(model, test_dataset, args.threshold)
+    if args.per_language_eval:
+        # evaluate the model per language
+        language_datasets = defaultdict(list)
+        for d in test_dataset:
+            language_datasets[d["language"]].append(d)
+
+        performances = []
+
+        for language, lang_data in language_datasets.items():
+            lang_performances = evaluate(model, lang_data, args.threshold)
+            lang_performances["language"] = language
+            performances.append(lang_performances)
+    else:
+        performances = evaluate(model, test_dataset, args.threshold)
     
     Path(args.output_file).parent.mkdir(parents=True, exist_ok=True)
     with open(args.output_file, "w", encoding="utf8") as f:
@@ -59,11 +74,18 @@ if __name__ == "__main__":
         action="store_true",
         help="whether to use CPU (default is GPU)"
     )
+    parser.add_argument(
+        "--per_language_eval",
+        action="store_true",
+        help="whether to evaluate the model per language (default is to not)"
+    )
     args = parser.parse_args()
     main(args)
 
 
 
-# args.model_path = "models/checkpoint-100"
-# args.data_test_file = "data/test_dataset.json"
-# python scripts/evaluate_model.py --data_test_file data/test_dataset.json --model_path models/checkpoint-100 --output_file results/results.json
+# python src/utils/evaluate_model.py --data_test_file data/HuggingFaceTB/SmolLM2-1.7B-Instruct/conll_test.json --model_path models/conll2003/checkpoint-1392 --output_file results/LLM1.json
+
+
+
+
