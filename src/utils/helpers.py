@@ -3,7 +3,8 @@ import json
 from typing import List
 
 from token_splitter import create_new_gliner_example
-from anonipy.definitions import Entity, Replacement
+from anonipy.definitions import Entity
+from anonipy.anonymize.generators import LLMLabelGenerator
 
 def get_true_ents(ner_ents: List[List], tokenized_text: List[str]) -> List[dict]:
   """Returns a list of true entities for a given example."""
@@ -62,16 +63,22 @@ def generate_LLM_labels(test_dataset_path: str, new_dataset_output_path: str, ll
         entities = generate_entities(true_ents)   # iz pravilnih entitet generiram pravilne Entity objekte
         new_entities = []
   
-        replacements = {}  # Store generated replacements
+        replacements = {}  
 
         for ent in entities:
             if ((ent.start_index, ent.end_index) in replacements):
               generated_text = replacements[(ent.start_index, ent.end_index)]
             else:
               if use_entity_attrs:
-                generated_text = llm_generator.generate(entity=ent, add_entity_attrs = data["language"], temperature=0.7)
+                entity_attrs = data["language"]
               else:
-                generated_text = llm_generator.generate(entity=ent, temperature=0.7)   # zgeneriram nov text za entity
+                entity_attrs = ""
+
+              if isinstance(llm_generator, LLMLabelGenerator):
+                generated_text = llm_generator.generate(entity=ent, add_entity_attrs = entity_attrs, temperature=0.7)
+              else:
+                generated_text = llm_generator.generate(entity=ent, add_entity_attrs = entity_attrs)
+              
               
               if generated_text.endswith("."):
                 generated_text = generated_text[:-1]
@@ -87,6 +94,7 @@ def generate_LLM_labels(test_dataset_path: str, new_dataset_output_path: str, ll
           
         # zamenjam v 'tokenized_text' in 'ner'
         updated_data = create_new_gliner_example(data, new_entities)
+        print(updated_data)
         data.update(updated_data)
 
         counter += 1
@@ -97,3 +105,4 @@ def generate_LLM_labels(test_dataset_path: str, new_dataset_output_path: str, ll
 
     with open(new_dataset_output_path, "w") as f:
       json.dump(test_dataset, f, indent=4, ensure_ascii=False)
+

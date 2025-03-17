@@ -46,5 +46,5 @@ if __name__ == "__main__":
     main(args)
 
 
-# python src/utils/generate_llm_labels.py --data_test_file data/conll2003/test_dataset.json --llm HuggingFaceTB/SmolLM2-1.7B-Instruct --new_data_output_file data/HuggingFaceTB/SmolLM2-1.7B-Instruct/conll_test.json
+# python src/utils/generate_llm_labels.py --data_test_file data/conll2003/test_dataset.json --llm mistralai/Mistral-7B-Instruct-v0.3 --new_data_output_file data/NEW_test.json
 

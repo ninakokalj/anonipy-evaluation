@@ -1,4 +1,7 @@
-[
+[   
+    {
+        "Original data - Average length": 15.169992019154
+    },
     {
         "Average length": 24.20750199521149,
         "Average similarity": 0.5854402665742956,
@@ -37,12 +40,12 @@
     {
         "Average length": 17.88707102952913,
         "Average similarity": 0.3703952360215255,
-        "LLM": "meta-llama/Meta-Llama-3-8B-Instruct"
+        "LLM": "meta-llama/Meta-Llama-3-8B-Instruct --use-quant"
     },
     {
         "Average length": 20.407023144453312,
         "Average similarity": 0.37962543636397084,
-        "LLM": "meta-llama/Llama-3.1-8B-Instruct"
+        "LLM": "meta-llama/Llama-3.1-8B-Instruct --use-quant"
     },
     {
         "Average length": 15.838387869114126,

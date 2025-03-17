@@ -4,7 +4,7 @@ from pathlib import Path
 import torch
 from collections import defaultdict
 
-from gliner import GLiNERConfig, GLiNER
+from gliner import GLiNER
 
 from evaluate import evaluate
 
@@ -32,6 +32,10 @@ def main(args):
             language_datasets[d["language"]].append(d)
 
         performances = []
+
+        all_performances = evaluate(model, test_dataset, args.threshold)
+        all_performances["language"] = "All"
+        performances.append(all_performances)
 
         for language, lang_data in language_datasets.items():
             lang_performances = evaluate(model, lang_data, args.threshold)
@@ -83,7 +87,5 @@ if __name__ == "__main__":
 
 
 
-# python src/utils/evaluate_model.py --data_test_file data/E3-JSI/test_dataset.json --model_path models/checkpoint-200 --output_file results/ckp_200.json
-
-
+# python src/utils/evaluate_model.py --data_test_file data/NEW_test.json --model_path models/conll2003/checkpoint-1392 --output_file results/RES.json
 

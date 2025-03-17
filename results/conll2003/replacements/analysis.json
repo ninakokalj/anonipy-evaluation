@@ -1,0 +1,60 @@
+[   
+    {
+        "Original data - Average length": 10.870686386044747
+    },
+    {
+        "Average length": 22.786499810390595,
+        "Average similarity": 0.5312500143437013,
+        "LLM": "HuggingFaceTB/SmolLM2-1.7B-Instruct"
+    },
+    {
+        "Average length": 118.128934395146,
+        "Average similarity": 0.19436440693199686,
+        "LLM": "HuggingFaceTB/SmolLM2-135M-Instruct"
+    },
+    {
+        "Average length": 39.21615472127417,
+        "Average similarity": 0.48665392839217597,
+        "LLM": "HuggingFaceTB/SmolLM2-360M-Instruct"
+    },
+    {
+        "Average length": 17.18354190367842,
+        "Average similarity": 0.26188547964830694,
+        "LLM": "meta-llama/Llama-3.2-1B-Instruct"
+    },
+    {
+        "Average length": 18.023890784982935,
+        "Average similarity": 0.2663197358113464,
+        "LLM": "meta-llama/Llama-3.2-1B-Instruct --use_quant"
+    },
+    {
+        "Average length": 13.267349260523321,
+        "Average similarity": 0.24292162000433637,
+        "LLM": "meta-llama/Llama-3.2-3B-Instruct"
+    },
+    {
+        "Average length": 13.538490709139174,
+        "Average similarity": 0.24425914707199228,
+        "LLM": "meta-llama/Llama-3.2-3B-Instruct --use_quant"
+    },
+    {
+        "Average length": 12.620022753128556,
+        "Average similarity": 0.22372929129658164,
+        "LLM": "meta-llama/Meta-Llama-3-8B-Instruct --use_quant"
+    },
+    {
+        "Average length": 13.914296549108835,
+        "Average similarity": 0.23635772030558727,
+        "LLM": "meta-llama/Llama-3.1-8B-Instruct --use_quant"
+    },
+    {
+        "Average length": 11.740235115661736,
+        "Average similarity": 0.2476278177519232,
+        "LLM": "Qwen/Qwen2.5-7B-Instruct"
+    },
+    {
+        "Average length": 26.039059537353054,
+        "Average similarity": 0.23489905700153688,
+        "LLM": "mistralai/Mistral-7B-Instruct-v0.3"
+    }
+]
