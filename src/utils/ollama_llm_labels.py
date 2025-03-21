@@ -11,8 +11,10 @@ def main(args):
     llm_generator = OllamaInterface(model_name = args.llm)
 
     # saves the new dataset with LLM generated entities
-    generate_LLM_labels(args.data_test_file, args.new_data_output_file, llm_generator, use_entity_attrs = True)
+    generate_LLM_labels(args.data_test_file, args.new_data_output_file, llm_generator, use_entity_attrs=False)
 
+    llm_generator.print_logs()
+    # llm_generator.clean()
 
 
 if __name__ == "__main__":
@@ -36,5 +38,6 @@ if __name__ == "__main__":
     main(args)
 
 
-# python src/utils/ollama_llm_labels.py --data_test_file data/E3-JSI/test_dataset.json --llm gemma3 --new_data_output_file data/NEW_test.json
+# python src/utils/ollama_llm_labels.py --data_test_file data/E3-JSI/test_dataset.json --llm deepseek-r1:8b --new_data_output_file data/NEW_test.json
 
+# python src/utils/ollama_llm_labels.py --data_test_file data/conll2003/test_dataset.json --llm deepseek-r1:8b --new_data_output_file data/NEW_test.json

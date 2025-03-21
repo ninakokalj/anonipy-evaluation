@@ -1,0 +1,78 @@
+[   
+    {
+        "Average length": 44.559058260175576,
+        "Average similarity": 0.4292489778920315,
+        "LLM": "deepseek-r1:8b"
+    },
+    {
+        "Average length": 18.037909018355947,
+        "Average similarity": 0.581424755954487,
+        "LLM": "deepseek-r1:8b structured output"
+    },
+    {
+        "Average length": 22.01755786113328,
+        "Average similarity": 0.3653066337740439,
+        "LLM": "dolphin3"
+    },
+    {
+        "Average length": 17.714285714285715,
+        "Average similarity": 0.4206307883002634, 
+        "LLM": "dolphin3 structured output"
+    },
+    {
+        "Average length": 15.480446927374302,
+        "Average similarity": 0.3535953873460268,
+        "LLM": "gemma3:4b"
+    },
+    {
+        "Average length": 15.976456504389466,
+        "Average similarity": 0.3516860691306672,
+        "LLM": "gemma3:12b"
+    },
+    {
+        "Average length": 19.221069433359936,
+        "Average similarity": 0.3361447481503936,
+        "LLM": "llama3:8b"
+    },
+    {
+        "Average length": 22.96608140462889,
+        "Average similarity": 0.3412712620057564,
+        "LLM": "llama3.1:8b"
+    },
+    {
+        "Average length": 18.298882681564248,
+        "Average similarity": 0.36815661605169664,
+        "LLM": "llama3.3:70b-instruct-q2_K"
+    },
+    {
+        "Average length": 33.13048683160415,
+        "Average similarity": 0.3337047096942753,
+        "LLM": "mistral-openorca"
+    },
+    {
+        "Average length": 17.471268954509178,
+        "Average similarity": 0.42719901692513956,
+        "LLM": "mistral-openorca structured output" 
+    },
+    {
+        "Average length": 15.96488427773344,
+        "Average similarity": 0.3773013009427371,
+        "LLM": "olmo2"
+    },
+    {
+        "Average length": 33.472865123703116,
+        "Average similarity": 0.3229850667849745,
+        "LLM": "phi4"
+    },
+    {
+        "Average length": 16.66560255387071,
+        "Average similarity": 0.3510769845682131,
+        "LLM": "phi4 structured output"
+    },
+    {
+        "Average length": 17.740622505985634,
+        "Average similarity": 0.3463213486623332,
+        "LLM": "qwen2.5:14b"
+    }
+    
+]

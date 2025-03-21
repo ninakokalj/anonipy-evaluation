@@ -42,7 +42,6 @@ def generate_entities(true_ents: List[dict]) -> List[Entity]:
   return entities
 
 
-
 # zamenjam v textu
 # naredim nove pravilne entitije (text, label)
 # naredim tokenized text
@@ -77,7 +76,7 @@ def generate_LLM_labels(test_dataset_path: str, new_dataset_output_path: str, ll
               if isinstance(llm_generator, LLMLabelGenerator):
                 generated_text = llm_generator.generate(entity=ent, add_entity_attrs = entity_attrs, temperature=0.7)
               else:
-                generated_text = llm_generator.generate(entity=ent, add_entity_attrs = entity_attrs)
+                generated_text = llm_generator.generate(entity=ent, add_entity_attrs = entity_attrs, structured_output = True)
               
               
               if generated_text.endswith("."):
@@ -94,9 +93,7 @@ def generate_LLM_labels(test_dataset_path: str, new_dataset_output_path: str, ll
           
         # zamenjam v 'tokenized_text' in 'ner'
         updated_data = create_new_gliner_example(data, new_entities)
-        print(updated_data)
         data.update(updated_data)
-
         counter += 1
         print(counter)  
     

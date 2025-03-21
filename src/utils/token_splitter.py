@@ -58,6 +58,11 @@ def find_sub_list(sub_list: list, main_list: list) -> list:
 
     return sub_list_indices
 
+def remove_duplicates(lst):
+    unique_tuples = set(tuple(sublist) for sublist in lst)
+    result = sorted([list(t) for t in unique_tuples], key=lambda x: (x[0], x[1]))
+    return result
+
 def create_new_gliner_example(example: dict, new_entities: list) -> dict:
     
     tokenizer = SpaCyTokenSplitter(
@@ -77,5 +82,5 @@ def create_new_gliner_example(example: dict, new_entities: list) -> dict:
         "language": example["language"],
         # "domain": example["domain"],
         "tokenized_text": ttext,
-        "ner": ner,
+        "ner": remove_duplicates(ner),
     }

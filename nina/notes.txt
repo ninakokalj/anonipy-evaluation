@@ -1,4 +1,4 @@
-
+source ~/PREPARE-anonipy-evaluation/venv/bin/activate
 
 # medical term -> common folder -> evaluate ner
 
@@ -17,12 +17,9 @@ mistralai/Mistral-7B-Instruct-v0.3              JA
 microsoft/Phi-3.5-mini-instruct                 JA
 Qwen/Qwen2.5-7B-Instruct                        JA 
 
-
-naloge:
---per lang evaluate
-- testiraj modele
-- excel tabela
-
+Ollama:
+ollama rm <model>
+ollama push <model>
 
 1) razdelim dataset 80% train, 20% test
 2) NER extractor naučim na train
@@ -45,5 +42,10 @@ Uporaba:
 4) zamenjaš entitete z LLM-jem
 -> results/llm_1.py
 
+structured ouputs:
+- deepseek-r1:8B
+- dolphin3
+- phi4
+- mistral-openorca
 
-
+-llama3.1:8b
