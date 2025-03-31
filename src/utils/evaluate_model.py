@@ -89,4 +89,4 @@ if __name__ == "__main__":
 
 # python src/utils/evaluate_model.py --data_test_file data/phi4/SO/conll_data.json --model_path models/E3-JSI/checkpoint-265 --output_file results/RES.json --per_language_eval
 
-# python src/utils/evaluate_model.py --data_test_file data/phi4/SO/conll_data.json --model_path models/conll2003/checkpoint-1392 --output_file results/RES.json 
+# python src/utils/evaluate_model.py --data_test_file data/NEW_test.json --model_path models/E3-JSI/checkpoint-265 --output_file results/RES.json 

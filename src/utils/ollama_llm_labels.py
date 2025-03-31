@@ -1,8 +1,7 @@
 from argparse import ArgumentParser
 
-from ollama_interface import OllamaInterface
-
-from helpers import generate_LLM_labels
+from utils.ollama_interface import OllamaInterface
+from utils.helpers import generate_LLM_labels
 
 
 

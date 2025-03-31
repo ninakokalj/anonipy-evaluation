@@ -42,10 +42,11 @@ Uporaba:
 4) zamenjaš entitete z LLM-jem
 -> results/llm_1.py
 
-structured ouputs:
-- deepseek-r1:8B
-- dolphin3
-- phi4
-- mistral-openorca
+phi4 -> 14b
+deepseek-r1 -> 8b
+olmo2 -> 7b
+mistral-openorca -> 7b
+dolphin3 -> 8b
+qwen -> 14b
 
--llama3.1:8b
+

@@ -1,20 +1,14 @@
 import json
 import ollama
 from ollama import chat
-from pydantic import BaseModel
+import pandas as pd
 
-def remove_duplicates(lst):
-    unique_tuples = set(tuple(sublist) for sublist in lst)
-    result = sorted([list(t) for t in unique_tuples], key=lambda x: (x[0], x[1]))
-    return result
 
-with open("data/NEW_test.json", "r") as f:
-    train_dataset = json.load(f)
+with open("data/evaluation/E3-JSI/test_dataset.json", "r") as f:
+        data = json.load(f)
 
-for d in train_dataset:
-    ner = d["ner"]
-    d["ner"] = remove_duplicates(ner)
+eng_data = [d for d in data if d["language"] == "Italian"]
 
-with open("data/NEW_test.json", "w") as f:
-    json.dump(train_dataset, f, indent=4, ensure_ascii=False) 
+with open("data/training/test_dataset/test_it.json", "w") as f:
+    json.dump(eng_data, f, indent=4, ensure_ascii=False)
 

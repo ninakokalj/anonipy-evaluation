@@ -46,5 +46,5 @@ if __name__ == "__main__":
     main(args)
 
 
-# python src/utils/generate_llm_labels.py --data_test_file data/conll2003/test_dataset.json --llm mistralai/Mistral-7B-Instruct-v0.3 --new_data_output_file data/NEW_test.json
+# python src/utils/generate_llm_labels.py --data_test_file data/training/test_dataset/test_en.json --llm models/360M/checkpoint-1086 --new_data_output_file data/NEW_test.json
 

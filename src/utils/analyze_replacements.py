@@ -24,4 +24,4 @@ def analyze_replacements(repl_file: str, output_file: str):
 
 
 
-analyze_replacements("results/ollama/conll2003/replacements/phi4_SO.json", "results/ANALYSIS.json")
+analyze_replacements("data/replacements.json", "results/ANALYSIS.json")

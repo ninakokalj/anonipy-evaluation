@@ -1,0 +1,37 @@
+
+
+first, last, org, address, email, username, pas num, tax identification number, date of birth
+
+- first name
+- last name 
+- email -> first + last
+- username -> first + last
+
+- organization
+llm
+
+- address -> llm + zamenjaš cesta/ ulica, zamenjaš številke
+https://sl.wikipedia.org/wiki/Kategorija:Ulice_v_Ljubljani
+
+- passport number -> koda za generiranje random številk
+ena ali dve črke, vse skupaj dolžina 9 
+
+
+- tax identification number
+
+- date of birth -> llm + koda za generiranje random datumov
+
+ostali jeziki:
+- imena
+- organizacije
+- naslovi
+- emaili
+- usernames
+- passport samo label
+- tax samo label
+- datumi delno
+
+Opažanja:
+* 135M se ne nauči
+
+slovenščina: osebno ime, ime
