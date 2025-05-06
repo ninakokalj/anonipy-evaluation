@@ -1,6 +1,7 @@
 import json
 
 from typing import List
+import csv
 
 from token_splitter import create_new_gliner_example
 from anonipy.definitions import Entity
@@ -53,53 +54,56 @@ def generate_LLM_labels(test_dataset_path: str, new_dataset_output_path: str, ll
     with open(test_dataset_path, "r") as f:
         test_dataset = json.load(f)
 
-    repl = {}
-    counter = 0
-    # zamenjat morm: text, tokenized_text, ner
-    for data in test_dataset:
-        
-        true_ents = get_true_ents(data["ner"], data["tokenized_text"])  # dobim pravilne entitete, ki jih mora najdit ner
-        entities = generate_entities(true_ents)   # iz pravilnih entitet generiram pravilne Entity objekte
-        new_entities = []
-  
-        replacements = {}  
+    with open("data/replacements.csv", 'w', newline='') as csvfile:
+      fieldnames = ['label', 'original_text', 'generated_text']
 
-        for ent in entities:
-            if ((ent.start_index, ent.end_index) in replacements):
-              generated_text = replacements[(ent.start_index, ent.end_index)]
-            else:
-              if use_entity_attrs:
-                entity_attrs = data["language"]
-              else:
-                entity_attrs = ""
+      writer = csv.DictWriter(csvfile, fieldnames=fieldnames, quoting=csv.QUOTE_MINIMAL)
+      writer.writeheader()
+      counter = 0
 
-              if isinstance(llm_generator, LLMLabelGenerator):
-                generated_text = llm_generator.generate(entity=ent, add_entity_attrs = entity_attrs, temperature=0.7)
-              else:
-                generated_text = llm_generator.generate(entity=ent, add_entity_attrs = entity_attrs, structured_output = True)
-              
-              
-              if generated_text.endswith("."):
-                generated_text = generated_text[:-1]
-              if (generated_text == ""):
-                generated_text = " "
-
-              repl[ent.text] = generated_text
-              replacements[(ent.start_index, ent.end_index)] = generated_text
-              data["text"] = data["text"].replace(ent.text, generated_text, 1)   # zamenjam v textu prvo ponovitev
-            
-            new_entities.append({"text": generated_text, "label": ent.label}) 
-            
+      # zamenjat morm: text, tokenized_text, ner
+      for data in test_dataset:
           
-        # zamenjam v 'tokenized_text' in 'ner'
-        updated_data = create_new_gliner_example(data, new_entities)
-        data.update(updated_data)
-        counter += 1
-        print(counter)  
+          true_ents = get_true_ents(data["ner"], data["tokenized_text"])  # dobim pravilne entitete, ki jih mora najdit ner
+          entities = generate_entities(true_ents)   # iz pravilnih entitet generiram pravilne Entity objekte
+          new_entities = []
     
-    with open("data/replacements.json", "w") as f:
-      json.dump(repl, f, indent=4, ensure_ascii=False)
+          replacements = {}  
 
-    with open(new_dataset_output_path, "w") as f:
-      json.dump(test_dataset, f, indent=4, ensure_ascii=False)
+          for ent in entities:
+              if ((ent.start_index, ent.end_index) in replacements):
+                generated_text = replacements[(ent.start_index, ent.end_index)]
+              else:
+                if use_entity_attrs:
+                  entity_attrs = data["language"]
+                else:
+                  entity_attrs = ""
+
+                if isinstance(llm_generator, LLMLabelGenerator):
+                  generated_text = llm_generator.generate(entity=ent, add_entity_attrs = entity_attrs, temperature=0.7)
+                else:
+                  generated_text = llm_generator.generate(entity=ent, add_entity_attrs = entity_attrs, structured_output = True)
+                
+                
+                if generated_text.endswith("."):
+                  generated_text = generated_text[:-1]
+                if (generated_text == ""):
+                  generated_text = " "
+
+                writer.writerow({'label': ent.label, 'original_text': ent.text, 'generated_text': generated_text})
+                replacements[(ent.start_index, ent.end_index)] = generated_text
+                data["text"] = data["text"].replace(ent.text, generated_text, 1)   # zamenjam v textu prvo ponovitev
+              
+              new_entities.append({"text": generated_text, "label": ent.label}) 
+              
+            
+          # zamenjam v 'tokenized_text' in 'ner'
+          updated_data = create_new_gliner_example(data, new_entities)
+          data.update(updated_data)
+          counter += 1
+          print(counter)  
+    
+
+      with open(new_dataset_output_path, "w") as f:
+        json.dump(test_dataset, f, indent=4, ensure_ascii=False)
 

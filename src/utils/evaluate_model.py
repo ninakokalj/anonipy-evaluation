@@ -7,6 +7,8 @@ from collections import defaultdict
 from gliner import GLiNER
 
 from evaluate import evaluate
+from constants import ENGLISH_LABELS
+
 
 
 def main(args):
@@ -42,7 +44,7 @@ def main(args):
             lang_performances["language"] = language
             performances.append(lang_performances)
     else:
-        performances = evaluate(model, test_dataset, args.threshold)
+        performances = evaluate(model, test_dataset, args.threshold, selected_labels=ENGLISH_LABELS)
     
     Path(args.output_file).parent.mkdir(parents=True, exist_ok=True)
     with open(args.output_file, "w", encoding="utf8") as f:
@@ -87,6 +89,5 @@ if __name__ == "__main__":
 
 
 
-# python src/utils/evaluate_model.py --data_test_file data/phi4/SO/conll_data.json --model_path models/E3-JSI/checkpoint-265 --output_file results/RES.json --per_language_eval
 
 # python src/utils/evaluate_model.py --data_test_file data/NEW_test.json --model_path models/E3-JSI/checkpoint-265 --output_file results/RES.json 

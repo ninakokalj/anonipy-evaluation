@@ -34,7 +34,7 @@ mess = [
             },
             {
                 "role": "user",
-                "content": f"Respond with 20 different real organization names in English. Respond only with the names.",
+                "content": f"Respond with 20 different real organization names in GERMAN. Respond only with the names.",
             }
         ]
 
@@ -59,21 +59,6 @@ def generate_data(messages: list, structured_output: bool = False):
     return data
 
 
-
-# očisti gpt odgovore - odstrani jim zaporedno številko
-def format_gpt_orgs(file_path: str):
-
-    orgs = set()
-
-    f = open(file_path, "r")
-    for line in f:
-        cleaned_content = re.sub(r"^\d+\.\s*", "", line, flags=re.DOTALL)
-        orgs.add(cleaned_content.strip())
-
-    np.savetxt("data/training/gpt.csv", list(orgs), delimiter=',', fmt='%s')
-
-
-
 # dva dataseta premeša in izloči ponovitve
 def shuffle(first_data, second_data, output_file):
     mn = set()
@@ -88,9 +73,8 @@ def shuffle(first_data, second_data, output_file):
     np.savetxt(output_file, list(mn), delimiter=',', fmt='%s')
 
 
-
 # iz csv fajla naredi json prompte
-def csv_2_json(language, label, csv_path, json_path):
+def csv_2_json(language: str, label: str, csv_path: str, json_path: str):
 
     df = pd.read_csv(csv_path, header=None)
 
@@ -104,10 +88,29 @@ def csv_2_json(language, label, csv_path, json_path):
     with open(json_path, "w") as f:
         json.dump(data, f, indent=4, ensure_ascii=False) 
 
-def names_2_json(language, csv_path, json_path):
+
+# ko sestavljaš naslove: df[0] je ulica, df[1] je pošta
+def address_2_json(language: str, label: str, csv_path: str, json_path: str):
 
     df = pd.read_csv(csv_path, header=None)
-    labels = ["osebno ime", "ime"]
+
+    data = []
+    for i in range(0, len(df)):
+        j = random.choice([j for j in range(0, len(df)) if j != i])
+        data.append(
+            {"instruction": f"What is a random {language} {label} replacement for {df[0][i]},{df[1][i]}?", 
+                "output": f"{df[0][j]},{df[1][j]}"  
+            } 
+        )
+
+    with open(json_path, "w") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+
+
+# labele podaš kot seznam in se naključno izbirajo
+def labels_2_json(language: str, labels: list, csv_path: str, json_path: str):
+
+    df = pd.read_csv(csv_path, header=None)
 
     data = [
             {"instruction": f"What is a random {language} {random.choice(labels)} replacement for {df[0][i]}?", 
@@ -119,37 +122,24 @@ def names_2_json(language, csv_path, json_path):
     with open(json_path, "w") as f:
         json.dump(data, f, indent=4, ensure_ascii=False) 
 
-def dates_2_json(language, label, csv_path, json_path):
+
+# da so isti formati skupaj
+def formats_2_json(language: str, labels: list, csv_path: str, json_path: str, num_formats: int, num_cases: int):
 
     df = pd.read_csv(csv_path, header=None)
     dates = []
-    for i in range(0, 8):
-        x = i * 60
-        y = i * 60 + 59
+
+    for i in range(0, num_formats):
+
+        x = i * num_cases
+        a = num_cases - 1
+        y = i * num_cases + a
+
         data = [
-                {"instruction": f"What is a random {language} {label} replacement for {df[0][i]}?", 
+                {"instruction": f"What is a random {language} {random.choice(labels)} replacement for {df[0][i]}?", 
                     "output": df[0][random.choice([j for j in range(x, y) if j != i])]
                 } 
-                for i in range(x, y)
-                ]
-        dates.extend(data)
-
-    with open(json_path, "w") as f:
-        json.dump(dates, f, indent=4, ensure_ascii=False) 
-
-def adds_2_json(language, label, csv_path, json_path):
-    f = open(csv_path, "r")
-    df = [line.strip() for line in f]
-    dates = []
-
-    for i in range(0, 3):
-        x = i * 100
-        y = i * 100 + 100
-        data = [
-                {"instruction": f"What is a random {language} {label} replacement for {df[i]}?", 
-                    "output": df[random.choice([j for j in range(x, y) if j != i])]
-                } 
-                for i in range(x, y)
+                for i in range(x, y+1)
                 ]
         dates.extend(data)
 
@@ -157,45 +147,86 @@ def adds_2_json(language, label, csv_path, json_path):
         json.dump(dates, f, indent=4, ensure_ascii=False) 
 
 
-#shuffle("data/training/person_slo.csv", "data/training/person2_slo.csv", "data/training/person_slo.csv")
-
-csv_2_json("Slovene", "osebno ime", "data/training/slo/person_slo.csv", "data/training/slo/person_slo.json")
-# names_2_json("Slovene", "data/training/slo/imena_wiki.csv", "data/training/slo/imena.json")
-# generate_data(messages, structured_output=True)
-
-# adds_2_json("English", "address", "data/training/address_eng.txt", "data/training/address_eng.json")
-# format_gpt_orgs("data/training/gpt.txt")
-
+# združi vse json fajle
 def shuffle_all():
 
-    with open("data/training/eng/person_eng.json", "r") as f:
+    with open("data/training/data_GERMAN/person.json", "r") as f:
         person = json.load(f)
     all = person
-    with open("data/training/eng/address_eng.json", "r") as f:
+    with open("data/training/data_GERMAN/address.json", "r") as f:
         address = json.load(f)
     all.extend(address)
-    with open("data/training/eng/emails_eng.json", "r") as f:
+    with open("data/training/data_GERMAN/emails.json", "r") as f:
         emails = json.load(f)
     all.extend(emails)
-    with open("data/training/eng/orgs_eng.json", "r") as f:
+    with open("data/training/data_GERMAN/orgs.json", "r") as f:
         orgs = json.load(f)
     all.extend(orgs)
-    with open("data/training/eng/dates_eng.json", "r") as f:
+    with open("data/training/data_GERMAN/dates.json", "r") as f:
         dates = json.load(f)
     all.extend(dates)
-    with open("data/training/eng/pass_eng.json", "r") as f:
+    with open("data/training/data_GERMAN/passport.json", "r") as f:
         passport = json.load(f)
     all.extend(passport)
-    with open("data/training/eng/tax_eng.json", "r") as f:
+    with open("data/training/data_GERMAN/tax.json", "r") as f:
         tax = json.load(f)
     all.extend(tax)
-    with open("data/training/eng/user_eng.json", "r") as f:
+    with open("data/training/data_GERMAN/user.json", "r") as f:
         user = json.load(f)
     all.extend(user)
 
     random.shuffle(all)
-    with open("data/training/eng/mix_eng.json", "w") as f:
+    with open("data/training/data_GERMAN/DATASET_de.json", "w") as f:
         json.dump(all, f, indent=4, ensure_ascii=False)
 
 
-# shuffle_all()
+
+# skrajšam dataset na x primerov za labelo
+def shorten_dataset(num_cases: int):
+
+    with open("data/training/data_GERMAN/person.json", "r") as f:
+        person = json.load(f)
+    random.shuffle(person)
+    all = person[:num_cases]
+    with open("data/training/data_GERMAN/address.json", "r") as f:
+        address = json.load(f)
+    random.shuffle(address)
+    all.extend(address[:num_cases])
+    with open("data/training/data_GERMAN/emails.json", "r") as f:
+        emails = json.load(f)
+    random.shuffle(emails)
+    all.extend(emails[:num_cases])
+    with open("data/training/data_GERMAN/orgs.json", "r") as f:
+        orgs = json.load(f)
+    random.shuffle(orgs)
+    all.extend(orgs[:num_cases])
+    with open("data/training/data_GERMAN/dates.json", "r") as f:
+        dates = json.load(f)
+    random.shuffle(dates)
+    all.extend(dates[:num_cases])
+    with open("data/training/data_GERMAN/passport.json", "r") as f:
+        passport = json.load(f)
+    random.shuffle(passport)
+    all.extend(passport[:num_cases])
+    with open("data/training/data_GERMAN/tax.json", "r") as f:
+        tax = json.load(f)
+    random.shuffle(tax)
+    all.extend(tax[:num_cases])
+    with open("data/training/data_GERMAN/user.json", "r") as f:
+        user = json.load(f)
+    random.shuffle(user)
+    all.extend(user[:num_cases])
+
+    random.shuffle(all)
+    with open(f"data/training/data_GERMAN/DATASET_de_{num_cases}.json", "w") as f:
+        json.dump(all, f, indent=4, ensure_ascii=False)
+
+
+#formats_2_json("French", ["date", "date", "date de naissance"], "data/training/helpers/fr/dates.csv", "data/training/data_FRENCH/dates.json", 5, 80)
+#shuffle("data/training/helpers/fr/names.csv", "data/training/helpers/fr/nam.csv", "data/training/helpers/fr/names.csv")
+#address_2_json("GERMAN", "adresse", "data/training/helpers/de/address.csv", "data/training/data_GERMAN/address1.json")
+#csv_2_json("Greek", "ΑΦΜ", "data/training/helpers/el/tax.csv", "data/training/data_GREEK/tax.json")
+#labels_2_json("GERMAN", ["ime", "osebno ime", "oseba"], "data/training/helpers/sl/person.csv", "data/training/data_GERMAN/person.json")
+#generate_data(messages, structured_output=True)
+#shuffle_all()
+#shorten_dataset(200)

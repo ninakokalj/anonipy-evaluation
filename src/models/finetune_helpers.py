@@ -2,9 +2,9 @@ import os
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 import torch
-from gliner import GLiNERConfig, GLiNER
+from gliner import GLiNER
 from gliner.training import Trainer, TrainingArguments
-from gliner.data_processing.collator import DataCollatorWithPadding, DataCollator
+from gliner.data_processing.collator import DataCollator
 
 
 def train_gliner_model(train_dataset, test_dataset):

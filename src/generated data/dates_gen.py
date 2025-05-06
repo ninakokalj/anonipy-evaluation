@@ -1,53 +1,55 @@
 import numpy as np
 import random
 
-import re
 from datetime import date
 
-import dateparser
-from babel.dates import format_datetime, format_datetime
+from babel.dates import format_datetime
 
 
 
 POSSIBLE_FORMATS = [
-    "yyyy-MM-dd",
+    #"yyyy-MM-dd",
     "dd-MM-yyyy",
-    "yyyy/MM/dd",
+    #"yyyy/MM/dd",
     "dd/MM/yyyy",
     "dd.MM.yyyy",
     "d.M.yyyy",
     "d MMMM yyyy",
-    "d. MMMM yyyy",
+    #"d. MMMM yyyy",
 ]
+
 days_31 = [1, 3, 5, 7, 8, 10, 12]
 days_30 = [4, 6, 9, 11]
 
-def generate_dates(count, lang):
+
+def generate_dates(count, lang, csv_path):
     all_formats = []
     for FMT in POSSIBLE_FORMATS:
         dates = set()
-        for i in range(count):
-            year = random.choice([i for i in range(1950, 2026)])
-            month = random.choice([i for i in range(1, 13)])
+
+        for _ in range(count):
+            year = random.randint(1950, 2025)
+            month = random.randint(1, 12)
 
             if month in days_31:
-                day = random.choice([i for i in range(1, 32)])
+                day = random.randint(1, 31)
             elif month in days_30:
-                day = random.choice([i for i in range(1, 31)])
+                day = random.randint(1, 30)
             else:
-                day = random.choice([i for i in range(1, 29)])
+                day = random.randint(1, 28)
 
             rand_date = date(year, month, day)
             formatted_date = format_datetime(
                 rand_date, format=FMT, locale=lang
             )
             dates.add(formatted_date)
+
         all_formats.extend(list(dates))
         
-    np.savetxt("data/training/dates_eng.csv", all_formats, delimiter=',', fmt='%s')
+    np.savetxt(csv_path, all_formats, delimiter=',', fmt='%s')
 
     
               
-generate_dates(60, "en")
+generate_dates(80, "el", "data/training/helpers/el/dates.csv")
 
 

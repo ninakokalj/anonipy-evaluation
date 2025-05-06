@@ -1,20 +1,27 @@
 import json
 from difflib import SequenceMatcher
+import pandas as pd
 
+from constants import ENGLISH_LABELS
 
-def analyze_replacements(repl_file: str, output_file: str):
-    with open(repl_file, "r") as f:
-        replacements = json.load(f)
+def analyze_replacements(csv_path: str, output_file: str, labels: list | None = None):
+
+    df = pd.read_csv(csv_path, header=None)
 
     avg_len = 0
     avg_sim = 0
-    for original, replacement in replacements.items():
+    count = 0
+    for i in range(0, len(df)):
+        if labels and df[0][i] not in labels:
+            continue
+        original, replacement = df[1][i], df[2][i]
         avg_len += len(replacement)
         avg_sim += SequenceMatcher(None, original, replacement).ratio()
+        count += 1
 
-    avg_len /= len(replacements)
-    avg_sim /= len(replacements)
-
+    avg_len /= count
+    avg_sim /= count
+ 
     results = {"Average length": avg_len, "Average similarity": avg_sim}
     
     with open(output_file, "w") as f:
@@ -24,4 +31,4 @@ def analyze_replacements(repl_file: str, output_file: str):
 
 
 
-analyze_replacements("data/replacements.json", "results/ANALYSIS.json")
+analyze_replacements("data/replacements.csv", "results/ANALYSIS.json", ENGLISH_LABELS)

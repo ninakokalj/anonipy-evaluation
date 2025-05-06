@@ -1,14 +1,30 @@
 import json
-import ollama
-from ollama import chat
+from difflib import SequenceMatcher
 import pandas as pd
 
+from constants import FRENCH_LABELS
 
-with open("data/evaluation/E3-JSI/test_dataset.json", "r") as f:
-        data = json.load(f)
+def analyze_replacements(csv_path: str, output_file: str, labels: list | None = None):
 
-eng_data = [d for d in data if d["language"] == "Italian"]
+    df = pd.read_csv(csv_path, header=None)
 
-with open("data/training/test_dataset/test_it.json", "w") as f:
-    json.dump(eng_data, f, indent=4, ensure_ascii=False)
+    avg_len = 0
+    count = 0
+    for i in range(0, len(df)):
+        if labels and df[0][i] not in labels:
+            continue
+        original, replacement = df[1][i], df[2][i]
+        avg_len += len(original)
+        count += 1
 
+    avg_len /= count
+    results = {"Average length": avg_len}
+    
+    with open(output_file, "w") as f:
+        json.dump(results, f, indent=4, ensure_ascii=False)
+
+    return avg_len
+
+
+
+analyze_replacements("data/training/results/Llama-3.2-1B/french/nenatreniran_repl.csv", "results/ANALYSIS.json", FRENCH_LABELS)

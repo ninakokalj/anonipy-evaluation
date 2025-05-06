@@ -2,7 +2,8 @@ from ner_evaluation import evaluate_ner_performance
 from helpers import get_true_ents, get_labels
 
 
-def evaluate(trained_model, test_dataset, threshold: float = 0.5) -> dict:
+
+def evaluate(trained_model, test_dataset, threshold: float = 0.5, selected_labels: list | None = None) -> dict:
   """Evaluate the performance of a GLiNER model on a test dataset."""
 
   performances = {
@@ -14,17 +15,23 @@ def evaluate(trained_model, test_dataset, threshold: float = 0.5) -> dict:
   pred_ents = []
   
   for example in test_dataset:
+
+    if selected_labels:
+      ner = [ner for ner in example["ner"] if ner[2] in selected_labels]
+    else:
+      ner = example["ner"]
+
     # get text to find entities
     text = example["text"]
     
     # get labels for entity prediction
-    labels = get_labels(example["ner"])
+    labels = get_labels(ner)
 
     # Predicted entities
     pred_ents.append(trained_model.predict_entities(text, labels, threshold=threshold))
    
     # get true entities from "ner" column
-    true_ents.append(get_true_ents(example["ner"], example["tokenized_text"]))
+    true_ents.append(get_true_ents(ner, example["tokenized_text"]))
   
   # evaluate the performance
     for match_type in performances:
