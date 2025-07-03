@@ -1,12 +1,17 @@
 import re
 
 
+#===============================================	
+# CoNLL-2003 DATASET HELPER FUNCTIONS
+#===============================================
+
+
+# IOB2 tagging scheme
 label_dict = {0: "O", 1: "B-PER" , 2: "I-PER" , 3: "B-ORG", 4: "I-ORG", 5: "B-LOC", 6: "I-LOC", 7: "B-MISC", 8: "I-MISC"}
 tags_dict = {"PER": "person", "ORG": "organization", "LOC": "location", "MISC": "miscellaneous"} 
 
-
 def convert_to_gliner(dataset) -> list:
-    """Converts the dataset into a list of objects suitable to train the GLiNER model"""
+    """Transforms the dataset into a structured JSON format expected by the GLiNER model."""
 
     return [
         {
@@ -17,15 +22,23 @@ def convert_to_gliner(dataset) -> list:
         }
         for sample in dataset
         if "tokens" in sample and "ner_tags" in sample
-        if (ner_entities := create_ner(sample["ner_tags"])) # filter out samples without entities
+        if (ner_entities := create_ner(sample["ner_tags"])) # Filter out samples without entities
     ]
 
 def create_text(tokens: list) -> str:
+    """Converts a list of tokens into a string."""
+
     text = " ".join(tokens)
     text = re.sub(r"\s([.,!?;:'])", r"\1", text)
     return text
 
 def create_ner(ner_tags: list) -> list:
+    """Uses IOB2 tagging scheme to construct entities.
+
+    Returns:
+        A list of entities in the format [[start, end, entity_type], ...]
+    """
+
     entities = []
     start, end, label = None, None, None
 

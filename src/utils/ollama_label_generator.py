@@ -1,20 +1,51 @@
-from ollama import chat
-import ollama
-from pydantic import BaseModel
-from anonipy.definitions import Entity
 import re
 
+import ollama
+from ollama import chat
+from pydantic import BaseModel
+
+from anonipy.definitions import Entity
+
+
+# Class for structured output
 class Replacement(BaseModel):
     replacement: str
 
-class OllamaInterface:
+
+# =====================================
+# Main class
+# =====================================
+
+
+class OllamaLabelGenerator:
+    """The class representing the Ollama LLM label generator.
+    
+    Methods:
+        generate(entity, add_entity_attrs, structured_output):
+            Generate the label based on the entity.
+    """
+
     def __init__(self, model_name: str):
-        
+        """Initializes the Ollama LLM label generator.
+
+        Args:
+            model_name: The name of the model to use.
+        """
+
         self.model = model_name
         self.structured_output_fails = 0
-        #ollama.pull(model_name)
 
     def generate(self, entity: Entity, add_entity_attrs: str, structured_output: bool = False) -> str:
+        """Generate the substitute for the entity based on it's attributes.
+            
+            Args:
+                entity: The entity to generate the label from.
+                add_entity_attrs: Additional entity attribute description to add to the generation.
+                structured_output: Whether to use structured output.
+
+        Returns:
+            The generated entity label substitute.
+        """
 
         messages = [
             {
@@ -53,9 +84,3 @@ class OllamaInterface:
 
     def print_logs(self):
         print(f"Structured output failed {self.structured_output_fails} times.")
-
-    def clean(self):
-        ollama.delete(self.model)
-
-    
-

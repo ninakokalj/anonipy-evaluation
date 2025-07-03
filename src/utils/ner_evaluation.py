@@ -1,5 +1,6 @@
-import numpy as np
 from typing_extensions import List, Literal, Tuple, TypedDict, Union
+import numpy as np
+
 
 # ======================================
 # Typings

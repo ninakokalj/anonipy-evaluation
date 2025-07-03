@@ -3,12 +3,12 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 import torch
 from gliner import GLiNER
-from gliner.training import Trainer, TrainingArguments
 from gliner.data_processing.collator import DataCollator
+from gliner.training import Trainer, TrainingArguments
 
 
-def train_gliner_model(train_dataset, test_dataset):
-    """Trains the GLiNER model using the provided training and test datasets."""
+def train_gliner_model(train_dataset: list, test_dataset: list, output_dir: str):
+    """Fine-tunes the GLiNER model using the provided training and test datasets."""
 
     device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
     model = GLiNER.from_pretrained("urchade/gliner_multi-v2.1")
@@ -23,12 +23,12 @@ def train_gliner_model(train_dataset, test_dataset):
     num_epochs = max(1, num_steps // num_batches)
 
     training_args = TrainingArguments(
-        output_dir="models/conll2003",
+        output_dir=output_dir,
         learning_rate=5e-6,
         weight_decay=0.01,
         others_lr=1e-5,
         others_weight_decay=0.01,
-        lr_scheduler_type="linear", #cosine
+        lr_scheduler_type="linear", 
         warmup_ratio=0.1,
         per_device_train_batch_size=batch_size,
         per_device_eval_batch_size=batch_size,

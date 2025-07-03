@@ -1,16 +1,27 @@
 import json
 from argparse import ArgumentParser
 from pathlib import Path
-import torch
 from collections import defaultdict
 
-from gliner import GLiNERConfig, GLiNER
+import torch
+from gliner import GLiNER
 
 from ..src.utils.evaluate import evaluate
+from ..src.utils.constants import LANGUAGE_LABELS, ALL_LABELS
 
 
-
+# used to evaluate a GLiNER model on the dataset that was modified with an LLM
 def main(args):
+    """
+    Evaluate a GLiNER model on a test dataset.
+    Args:
+        - args.data_test_file: The path to the test dataset
+        - args.model_path: The path to the GLiNER model
+        - args.output_file: The path where the evaluation results will be saved
+        - args.threshold: The threshold for the prediction (default is 0.5)
+        - args.use_cpu: Whether to use CPU or GPU (default is to use GPU)
+        - args.per_language_eval: Whether to evaluate the model per language
+    """
 
     if not Path(args.data_test_file).exists():
         raise FileNotFoundError(f"Test data file {args.data_test_file} does not exist")
@@ -34,12 +45,17 @@ def main(args):
 
         performances = []
 
+        all_performances = evaluate(model, test_dataset, args.threshold)
+        all_performances["language"] = "All"
+        performances.append(all_performances)
+
         for language, lang_data in language_datasets.items():
             lang_performances = evaluate(model, lang_data, args.threshold)
             lang_performances["language"] = language
             performances.append(lang_performances)
+
     else:
-        performances = evaluate(model, test_dataset, args.threshold)
+        performances = evaluate(model, test_dataset, args.threshold, selected_labels=ALL_LABELS) # default selected_labels = None 
     
     Path(args.output_file).parent.mkdir(parents=True, exist_ok=True)
     with open(args.output_file, "w", encoding="utf8") as f:
@@ -51,16 +67,19 @@ if __name__ == "__main__":
     parser.add_argument(
         "--data_test_file", 
         type=str, 
+        required=True,
         help="path to the test data file"
     )
     parser.add_argument(
         "--model_path", 
         type=str, 
+        required=True,
         help="path to the pre-trained model"
     )
     parser.add_argument(
         "--output_file", 
         type=str, 
+        required=True,
         help="path to the output file"
     )
     parser.add_argument(
@@ -82,10 +101,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
     main(args)
 
+# Example:
+# python scripts/evaluate_model.py --data_test_file data/NEW_test.json --model_path models/E3-JSI/checkpoint-265 --output_file results/RES.json
 
-
-# python src/utils/evaluate_model.py --data_test_file data/HuggingFaceTB/SmolLM2-1.7B-Instruct/conll_test.json --model_path models/conll2003/checkpoint-1392 --output_file results/LLM1.json
-
-
-
-
+"""
+  File "/home/ninak/PREPARE-anonipy-evaluation/scripts/evaluate_model.py", line 9, in <module>
+    from ..src.utils.evaluate import evaluate
+ImportError: attempted relative import with no known parent package
+"""

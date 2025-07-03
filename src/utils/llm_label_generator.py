@@ -1,16 +1,19 @@
+import random
 import warnings
-from typing import Tuple, List
+
+from typing import List, Tuple
+
 import pandas as pd
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from peft import PeftModel
-import random
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
-from anonipy.utils.package import is_installed_with
 from anonipy.anonymize.generators.interface import GeneratorInterface
 from anonipy.definitions import Entity
+from anonipy.utils.package import is_installed_with
 
-from constants import ENGLISH_LABELS
+from constants import ALL_LABELS
+
 
 # =====================================
 # Main class
@@ -48,6 +51,8 @@ class LLMLabelGenerator(GeneratorInterface):
 
         Args:
             model_name: The name of the model to use.
+            adapter_name: The name of the adapter to use.
+            in_context: Whether to use in-context learning or not.
             use_gpu: Whether to use GPU or not.
             use_quant: Whether to use quantization or not.
 
@@ -109,8 +114,9 @@ class LLMLabelGenerator(GeneratorInterface):
             The generated entity label substitute.
 
         """
-        # if using in-context learning
-        if self.in_context and entity.label in ENGLISH_LABELS:
+
+        # If using in-context learning
+        if self.in_context and entity.label in ALL_LABELS:  # icl only for labels in ALL_LABELS
             message = build_icl_prompt(entity, add_entity_attrs)
         else:
             message = [
@@ -257,6 +263,12 @@ class LLMLabelGenerator(GeneratorInterface):
         )
         return response
 
+
+# ========================================
+# Helper functions for in-context learning
+# ========================================
+
+# Paths to the CSV files containing entities to use in prompts (only English data here)
 paths = {
     "person name": "data/training/helpers/en/person.csv",
     "person": "data/training/helpers/en/person.csv",
@@ -272,6 +284,8 @@ paths = {
 }
 
 def build_icl_prompt(entity: Entity, add_entity_attrs: str) -> List[dict]:
+    """Builds the prompt for in-context learning with 3 examples of correct replacements."""
+
     label = entity.label
     text = entity.text
     csv_path = paths[label]

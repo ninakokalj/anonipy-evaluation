@@ -1,0 +1,24 @@
+
+Labels to cover:
+
+- first name
+- last name 
+=> person
+=> email
+=> username
+
+web/llm:
+- organization
+- address
+
+code:
+- passport number
+- tax id
+- date
+
+Viri:
+https://sl.wikipedia.org/wiki/Kategorija:Ulice_v_Ljubljani
+https://www.bizi.si/TSMEDIA/O/oskrba-na-domu-7222/
+
+Opažanja:
+* 135M se ne nauči

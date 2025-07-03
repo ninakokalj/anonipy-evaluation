@@ -1,16 +1,15 @@
 import json
-
 import random
 from collections import defaultdict
 
 
 #===============================================	
-# DATASET HELPER FUNCTIONS
+# E3-JSI DATASET HELPER FUNCTIONS
 #===============================================
 
 
 def convert_to_gliner(dataset) -> list:
-    """Converts the dataset into a list of objects suitable to train the GLiNER model"""
+    """Transforms the dataset into a structured JSON format expected by the GLiNER model."""
 
     return [
         {
@@ -24,12 +23,12 @@ def convert_to_gliner(dataset) -> list:
         if "text" in sample and "gliner_tokenized_text" in sample and "gliner_entities" in sample
     ]
 
-
 def split_dataset(data: list, train: int = 0.8) -> tuple:
     """Splits the dataset into train and test sets based on the specified ratio."""
 
     grouped_data = defaultdict(list)
 
+    # Group data by language and domain for even distribution
     for d in data:
         grouped_data[(d["language"], d["domain"])].append(d)
 
@@ -37,7 +36,7 @@ def split_dataset(data: list, train: int = 0.8) -> tuple:
     test_dataset = []
 
     for (language, domain), records in grouped_data.items():
-        random.shuffle(records)  
+        random.shuffle(records)
         split_point = int(len(records) * train) 
         train_dataset.extend(records[:split_point])  # Add to train dataset
         test_dataset.extend(records[split_point:])  # Add to test dataset

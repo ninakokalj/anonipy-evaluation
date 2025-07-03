@@ -1,14 +1,16 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from trl import SFTConfig, SFTTrainer, DataCollatorForCompletionOnlyLM
 from datasets import load_dataset
 from peft import LoraConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from trl import DataCollatorForCompletionOnlyLM, SFTConfig, SFTTrainer
 
 
+# formatting prompts
 def formatting_prompts_func(example):
         return [f"### Question: {q}\n ### Answer: {a}" for q, a in zip(example['instruction'], example['output'])]
 
 
 def finetune_model(model_path: str, train_data_path: str, output_model_dir: str):
+    """Fine-tunes a large language model using the provided training dataset and saves the fine-tuned model."""
 
     model = AutoModelForCausalLM.from_pretrained(model_path)
     tokenizer = AutoTokenizer.from_pretrained(model_path)
@@ -38,6 +40,7 @@ def finetune_model(model_path: str, train_data_path: str, output_model_dir: str)
 
 
 def finetune_adapters(model_path: str, train_data_path: str, output_model_dir: str):
+    """Fine-tunes adapter modules for a large language model on the provided dataset and saves the resulting adapters."""
 
     dataset = load_dataset("json", data_files=train_data_path, split="train")
     split_point = int(len(dataset) * 0.8) 
@@ -58,7 +61,6 @@ def finetune_adapters(model_path: str, train_data_path: str, output_model_dir: s
         lora_alpha=32,
         lora_dropout=0.05,
         target_modules=["q_proj", "v_proj", "k_proj", "o_proj"],    # q_proj = query projection, v_proj = value, k_proj = key, o_proj = output
-        #modules_to_save=["lm_head", "embed_token"],
         task_type="CAUSAL_LM",
     )
 
@@ -75,14 +77,11 @@ def finetune_adapters(model_path: str, train_data_path: str, output_model_dir: s
     trainer.train()
 
 
+"""
+- gradient_accumulation_steps: how many batches to process before updating model weights
+- num_train_epochs: how many times to go through the entire training dataset
+- max_steps: maximum number of batches to process (-1 means go through the full dataset)
+- learning_rate: how quickly the model learns (usually between 1e-5 and 1e-6)
+"""
 
-#finetune_model("HuggingFaceTB/SmolLM2-360M-Instruct", "data/training/data_ITALIAN/DATASET_it_300.json", "models/360M/italian_300")
-finetune_adapters("meta-llama/Llama-3.2-1B-Instruct", "data/training/data_GERMAN/DATASET_de_200.json", "models/Llama-3.2-1B/german_200")
 
-
-# gradient_accumulation_steps kok batch sizov počakat preden posodobiš
-# epoch kolkrat greš čez celoten dataset num_train_epochs
-# max_step max batchov ki jih bo vidu //pusti -1 da gre čez celoten dataset
-# learning_rate -> 10^-5 -> 10^-6
-
-# dodala definirala learning_rate, dodala eval_dataset
