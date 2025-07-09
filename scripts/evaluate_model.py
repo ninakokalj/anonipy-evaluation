@@ -6,8 +6,8 @@ from collections import defaultdict
 import torch
 from gliner import GLiNER
 
-from ..src.utils.evaluate import evaluate
-from ..src.utils.constants import LANGUAGE_LABELS, ALL_LABELS
+from src.utils.evaluate import evaluate
+from src.utils.constants import LANGUAGE_LABELS, ALL_LABELS
 
 
 # used to evaluate a GLiNER model on the dataset that was modified with an LLM

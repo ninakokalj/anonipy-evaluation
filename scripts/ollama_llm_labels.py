@@ -2,8 +2,8 @@ from argparse import ArgumentParser
 
 import ollama
 
-from ..src.utils.helpers import generate_LLM_labels
-from ..src.utils.ollama_label_generator import OllamaLabelGenerator
+from src.utils.helpers import generate_LLM_labels
+from src.utils.ollama_label_generator import OllamaLabelGenerator
 
 
 # used to create replacements for the entitites in the test dataset using an LLM from Ollama

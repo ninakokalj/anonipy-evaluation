@@ -1,5 +1,5 @@
-from ner_evaluation import evaluate_ner_performance
-from helpers import get_true_entities, get_labels
+from src.utils.ner_evaluation import evaluate_ner_performance
+from src.utils.helpers import get_true_entities, get_labels
 
 
 def evaluate(trained_model, test_dataset, threshold: float = 0.5, selected_labels: list | None = None) -> dict:

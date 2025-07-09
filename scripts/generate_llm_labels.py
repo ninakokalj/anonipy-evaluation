@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 
-from ..src.utils.helpers import generate_LLM_labels
-from ..src.utils.llm_label_generator import LLMLabelGenerator
+from src.utils.helpers import generate_LLM_labels
+from src.utils.llm_label_generator import LLMLabelGenerator
 
 
 # used to create replacements for the entitites in the test dataset using an LLM
