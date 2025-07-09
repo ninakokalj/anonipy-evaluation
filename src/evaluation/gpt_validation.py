@@ -6,7 +6,7 @@ from utils.constants import ALL_LABELS, LANGUAGE_LABELS
 
 
 # Set OpenAI API key
-openai.api_key = ''
+#openai.api_key = ''
 
 def check_with_gpt(csv_path: str, labels: list, language: str):
     """Checks the validity of entities in a CSV file using OpenAI's GPT-3 model."""
