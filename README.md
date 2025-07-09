@@ -1,6 +1,7 @@
 # PREPARE Anonipy Evaluation
 
-This project contains scripts for testing and evaluating different models relating to the `anonipy` package, including data anonymization and entity replacement.
+This project contains scripts for testing and evaluating different models relating to the anonipy package, including data anonymization and entity replacement. It also includes code for fine-tuning the GLiNER model as well as adapting large language models.
+
 
 ## ☑️ Requirements
 
